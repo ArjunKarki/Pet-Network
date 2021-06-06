@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "423373763829",
+    "firebase_url": "https://pet-network-marter.firebaseio.com",
+    "project_id": "pet-network-marter",
+    "storage_bucket": "pet-network-marter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423373763829:android:8bd9a5fa5e0f987a",
+        "android_client_info": {
+          "package_name": "com.petnetwork"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "423373763829-dt9g4vf9sdj7b310gevkdisikhlv5dl2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.petnetwork",
+            "certificate_hash": "7dfb2a6e38e558f25d8316139bbfa52641c710fb"
+          }
+        },
+        {
+          "client_id": "423373763829-96fvfn6p3qc5jlirt5tk7r3an1nie10t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcghf3hiqw9j_l3E0-wnjWw_8ocbg93ak"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "423373763829-96fvfn6p3qc5jlirt5tk7r3an1nie10t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

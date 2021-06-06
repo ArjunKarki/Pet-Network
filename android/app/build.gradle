@@ -1,0 +1,127 @@
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2/' } // Gradle Plugin Portal
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.10.0, 0.99.99]'
+    }
+}
+
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+apply plugin: "com.android.application"
+
+import com.android.build.OutputFile
+
+project.ext.react = [
+    entryFile: "index.js"
+]
+
+apply from: "../../node_modules/react-native/react.gradle"
+
+
+def enableSeparateBuildPerCPUArchitecture = false
+
+def enableProguardInReleaseBuilds = false
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.petnetwork"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 2
+        versionName "2.0"
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+        vectorDrawables.useSupportLibrary = true
+        manifestPlaceholders = [onesignal_app_id: "0353aa65-9228-402f-934d-d9a08d5fe61b",
+                                onesignal_google_project_number: "REMOTE"]
+
+        multiDexEnabled true
+    }
+    splits {
+        abi {
+            reset()
+            enable enableSeparateBuildPerCPUArchitecture
+            universalApk false  // If true, also generate a universal APK
+            include "armeabi-v7a", "x86"
+        }
+    }
+
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force "com.airbnb.android:lottie:2.5.5"
+        }
+    }
+    // applicationVariants are e.g. debug, release
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            // For each separate APK per architecture, set a unique version code as described here:
+            // http://tools.android.com/tech-docs/new-build-system/user-guide/apk-splits
+            def versionCodes = ["armeabi-v7a":1, "x86":2]
+            def abi = output.getFilter(OutputFile.ABI)
+            if (abi != null) {  // null for the universal-debug, universal-release variants
+                output.versionCodeOverride =
+                        versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation project(':react-native-fast-image')
+    implementation project(':react-native-fbsdk')
+    implementation project(':react-native-google-signin')
+    implementation "com.google.android.gms:play-services-base:16.0.1"
+    implementation 'com.facebook.android:facebook-android-sdk:4.36.0'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation project(':react-native-google-places')
+    implementation project(':realm')
+    implementation project(':react-native-maps')
+    implementation project(':react-native-onesignal')
+    implementation project(':react-native-share')
+    implementation project(':merryjs_photo-viewer')
+    implementation project(':react-native-image-crop-picker')
+    implementation project(':lottie-react-native')
+    implementation project(':react-native-linear-gradient')
+    implementation project(':react-native-orientation')
+    implementation project(':react-native-vector-icons')
+    implementation project(':react-native-keep-awake')
+    implementation project(':react-native-video')
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation 'com.facebook.fresco:animated-gif:1.9.0'
+
+}
+
+// Run this once to be able to run the application with BUCK
+// puts all compile dependencies into folder libs for BUCK to use
+task copyDownloadableDepsToLibs(type: Copy) {
+    from configurations.compile
+    into 'libs'
+}
+
+apply plugin: 'com.google.gms.google-services'
